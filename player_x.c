@@ -1,0 +1,96 @@
+#include "includes/filler.h"
+
+static int		check_line(t_info *info, int y, char c)
+{
+	int		x;
+
+	x = 0;
+	while (x < info->map_x)
+	{
+		if (info->map[y][x] == c || info->map[y][x] == ft_toupper(c))
+			return (1);
+		x++;
+	}
+	return (0);
+}
+
+static int		check_enemy_inline(t_info *info)
+{
+	int		y;
+	int		x;
+
+	y = 0;
+	while (y < info->map_y)
+	{
+		x = 0;
+		while (x < info->map_x)
+		{
+			if (info->map[y][x] == info->player)
+			{
+				if (check_line(info, y, 'o') == 1)
+					return (1);
+				else
+					return (0);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (0);
+}
+
+static int	check_top_line(t_info *info)
+{
+	int		x;
+
+	x = 0;
+	while (x < info->map_x)
+	{
+		if (info->map[info->map_y - 1][x] == info->player)
+			return (1);
+		x++;
+	}
+	return (0);
+}
+
+int				player_x(t_info *info, t_piece *piece)
+{
+	info->fail_place = 0;
+	if(info->map == 0)
+	{
+		if(get_map(info) == 0)
+			return (0);
+		get_start_position_enemy(info);
+		get_start_position_player(info);
+	}
+	else
+		get_map(info);
+	get_piece(piece);
+	if(info->startpoint_player >= info->startpoint_enemy)
+	{
+		if (check_enemy_inline(info) == 1 && check_top_line(info) == 0)
+			place_bot_x(info, piece);
+		else
+			place_top_x(info, piece);
+		if (info->fail_place == 1)
+			place_top_x(info, piece);
+	}
+	if(info->startpoint_player < info->startpoint_enemy)
+	{
+		if (check_enemy_inline(info) == 1 && check_top_line(info) == 0)
+			place_top_x(info, piece);
+		else
+			place_bot_x(info, piece);
+		if (info->fail_place == 1)
+			place_top_x(info, piece);
+	}
+	if (info->finish == 1)
+	{
+		ft_putnbr(0);
+		ft_putchar(' ');
+		ft_putnbr(0);
+		ft_putchar('\n');
+		return (0);
+	}
+	return (1);
+}
