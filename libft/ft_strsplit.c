@@ -32,7 +32,7 @@ static int		ft_word_count(const char *s, char c)
 		wc++;
 	while (s[i] != '\0')
 	{
-		if (!(ft_check_delimiter(s[i], c)) && ft_check_delimiter(s[i - 1], c))
+		if (!(ft_check_delimiter(s[i], c)) &&  i > 0 && ft_check_delimiter(s[i - 1], c))
 			wc++;
 		i++;
 	}

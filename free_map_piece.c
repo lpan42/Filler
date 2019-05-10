@@ -43,12 +43,21 @@ void free_arr(char **arr)
 		i++;
 	}
 	free(arr);
+	arr = NULL;
 }
 
 void free_map_piece(t_info *info, t_piece *piece)
 {
 	if(info->map != NULL)
+	{
 		free_map(info);
+		info->map = NULL;
+	}
+	
 	if(piece->piece != NULL)
+	{
 		free_piece(piece);
+		piece->piece = NULL;
+	}
 }
+	

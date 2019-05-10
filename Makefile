@@ -6,7 +6,7 @@
 #    By: lpan <lpan@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/10 18:26:42 by lpan              #+#    #+#              #
-#    Updated: 2019/05/10 18:26:48 by lpan             ###   ########.fr        #
+#    Updated: 2019/05/11 00:30:55 by lpan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = lpan.filler
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g#3 -fsanitize=address
 
 SRC = main.c\
 	parse_info_piece.c\
@@ -52,6 +52,8 @@ fclean : clean
 	make -C ./libft/ fclean
 	rm -f $(NAME)
 
-re : fclean all
+re : all
+	#make re -C ./libft/
+	
 
 .PHONY : all clean fclean re

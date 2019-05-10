@@ -81,26 +81,30 @@ int	get_map(t_info *info)
 	map = NULL;
 	temp = NULL;
 	num_y = 0;
+	if (get_next_line(0, &line) < 1)
+		return (0);
+	free_var(line);
 	while (get_next_line(0, &line) > 0)
 	{
-		if (ft_isdigit(line[0]) && (line[4] == '.' || line[4] == 'O' ||
-			line[4] == 'X' || line[4] == 'x' || line[4] == 'o'))
+		if (ft_isdigit(line[0]) && (line[4] == '.' || line[4] == 'O' || line[4] == 'X' || line[4] == 'x' || line[4] == 'o'))
 		{
 			temp = ft_strjoin(map, &line[4]);
 			free_var(map);
 			map = ft_strjoin(temp, "\n");
+			free_var(temp);
+			temp = NULL;
 			num_y++;
 		}
 		if (num_y == info->map_y)
 			break ;
 		free_var(line);
 	}
-	if(!(info->map = ft_strsplit(map, '\n')))
+	if (!(info->map = ft_strsplit(map, '\n')))
 		return (0);
 	free_var(temp);
 	free_var(map);
 	free_var(line);
-	if(check_map(info) == 0)
+	if (check_map(info) == 0)
 		return(0);
 	return(1);
 }
@@ -118,7 +122,8 @@ int	get_piece(t_piece *piece)
 	num_y = 0;
 	if(get_next_line(0, &line) < 1)
 		return (0);
-    split = ft_strsplit(line, ' ');
+    if(!(split = ft_strsplit(line, ' ')))
+		return (0);
 	free_var(line);
 	piece->piece_y = ft_atoi(split[1]);
 	piece->piece_x = ft_atoi(split[2]);
@@ -128,6 +133,8 @@ int	get_piece(t_piece *piece)
 		temp = ft_strjoin(piece_temp, line);
 		free_var(piece_temp);
 		piece_temp = ft_strjoin(temp, "\n");
+		free_var(temp);
+			temp = NULL;
 		num_y++;
 		if (num_y == piece->piece_y)
 			break ;
