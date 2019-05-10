@@ -18,10 +18,10 @@ int get_player(t_info *info)
 	}
 	else
 	{
-		free(line);
+		free_var(line);
 		return (0);
 	}
-	free(line);
+	free_var(line);
 	return (1);
 }
 
@@ -34,14 +34,15 @@ int get_map_xy(t_info *info)
 		return (0);
 	if(line[0] != 'P')
 	{
-		free(line);
+		free_var(line);
 		return (0);
 	}
     if(!(split = ft_strsplit(line, ' ')))
 		return (0);
     info->map_y = ft_atoi(split[1]);
 	info->map_x = ft_atoi(split[2]);
-	free(line);
+	free_arr(split);
+	free_var(line);
 	return (1);
 }
 
@@ -85,22 +86,22 @@ int	get_map(t_info *info)
 		if (ft_isdigit(line[0]) && (line[4] == '.' || line[4] == 'O' ||
 			line[4] == 'X' || line[4] == 'x' || line[4] == 'o'))
 		{
-			temp = map;
-			map = ft_strjoin(temp, &line[4]);
-			if(temp)
-				free(temp);
-			temp = map;
+			temp = ft_strjoin(map, &line[4]);
+			free_var(map);
 			map = ft_strjoin(temp, "\n");
 			num_y++;
 		}
 		if (num_y == info->map_y)
 			break ;
+		free_var(line);
 	}
-	info->map = ft_strsplit(map, '\n');
+	if(!(info->map = ft_strsplit(map, '\n')))
+		return (0);
+	free_var(temp);
+	free_var(map);
+	free_var(line);
 	if(check_map(info) == 0)
 		return(0);
-	free(map);
-	free(line);
 	return(1);
 }
 
@@ -115,25 +116,29 @@ int	get_piece(t_piece *piece)
 	piece_temp = NULL;
 	temp = NULL;
 	num_y = 0;
-	get_next_line(0, &line);
+	if(get_next_line(0, &line) < 1)
+		return (0);
     split = ft_strsplit(line, ' ');
+	free_var(line);
 	piece->piece_y = ft_atoi(split[1]);
 	piece->piece_x = ft_atoi(split[2]);
+	free_arr(split);
 	while (get_next_line(0, &line) > 0)
 	{
-		temp = piece_temp;
-		piece_temp = ft_strjoin(temp, line);
-		if(temp)
-			free(temp);
-		temp = piece_temp;
+		temp = ft_strjoin(piece_temp, line);
+		free_var(piece_temp);
 		piece_temp = ft_strjoin(temp, "\n");
 		num_y++;
 		if (num_y == piece->piece_y)
 			break ;
+		free_var(line);
 	}
 	if(!(piece->piece = ft_strsplit(piece_temp, '\n')))
+	{
+		free_var(line);
 		return (0);
-	free(piece_temp);
-	free(line);
+	}
+	free_var(piece_temp);
+	free_var(line);
 	return (1);
 }

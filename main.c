@@ -91,4 +91,5 @@ int				main(void)
 			if (player_x(&info, &piece) == 0)
 				break ;
 	}
+	free_map_piece(&info, &piece);
 }

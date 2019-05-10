@@ -96,5 +96,6 @@ int				player_x(t_info *info, t_piece *piece)
 		ft_putchar('\n');
 		return (0);
 	}
+	free_map_piece(info, piece);
 	return (1);
 }

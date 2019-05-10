@@ -26,6 +26,8 @@ typedef struct	s_piece
     char	**piece;
 }				t_piece;
 
+void    free_var(void *var);
+void free_arr(char **arr);
 int    get_player(t_info *info);
 int    get_map_xy(t_info *info);
 int     get_map(t_info *info);
@@ -41,5 +43,6 @@ void    place_top_x(t_info *info, t_piece *piece);
 void	place_bot_x(t_info *info, t_piece *piece);
 void	place_right_x(t_info *info, t_piece *piece);
 int		player_x(t_info *info, t_piece *piece);
+void free_map_piece(t_info *info, t_piece *piece);
 
 #endif

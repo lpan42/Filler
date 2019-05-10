@@ -22,7 +22,8 @@ SRC = main.c\
 	place_o.c\
 	player_x.c\
 	place_x.c\
-	checkplace.c
+	checkplace.c\
+	free_map_piece.c
 
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
