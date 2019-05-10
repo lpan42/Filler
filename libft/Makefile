@@ -11,10 +11,11 @@
 # **************************************************************************** #
 
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 HEADER = -I ./libft.h
 NAME = libft.a
 OBJECTS = $(SOURCES:.c=.o)
+
 SOURCES = ./ft_atoi.c\
 			ft_isalnum.c\
 			ft_putchar.c\
@@ -84,12 +85,13 @@ SOURCES = ./ft_atoi.c\
 .PHONY: all clean fclean re
 
 $(NAME): $(OBJECTS)
-	$(CC) $(FLAGS) -c $(SOURCES) $(HEADER)
 	ar rc $(NAME) $(OBJECTS)
 	ranlib $(NAME)
 
 all: $(NAME)
 
+%.o : %.c
+	$(CC) $(FLAGS) -c $(SOURCES) $(HEADER)
 clean:
 	rm -f $(OBJECTS)
 

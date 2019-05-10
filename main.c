@@ -68,8 +68,10 @@ int				main(void)
 	t_piece	piece;
 
 	initiate_struct(&info, &piece);
-	get_player(&info);
-    get_map_xy(&info);
+	if(!get_player(&info))
+		return (0);
+    if(!get_map_xy(&info))
+		return (0);
 	//get_map(&info);
 	// 	printf("wrongmap\n");
 	// get_start_position_player(&info);
@@ -78,6 +80,8 @@ int				main(void)
 	// player_o(&info, &piece);
 	// printf("enemy: %d\n", info.startpoint_enemy);
 	// printf("player:%d\n", info.startpoint_player);
+	// printf("map_x: %d\n", info.map_x);
+	// printf("map_y: %d\n", info.map_y);
 	while (1)
 	{
 		if (info.player == 'O')

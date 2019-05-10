@@ -66,8 +66,12 @@ int				player_o(t_info *info, t_piece *piece)
 		get_start_position_player(info);
 	}
 	else
-		get_map(info);
-	get_piece(piece);
+	{
+		if(get_map(info) == 0)
+			return (0);
+	}
+	if(!(get_piece(piece)))
+		return (0);
 	if(info->startpoint_player <= info->startpoint_enemy)
 	{
 		if (check_enemy_inline(info) == 1 && check_top_line(info) == 0)

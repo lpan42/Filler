@@ -26,10 +26,10 @@ typedef struct	s_piece
     char	**piece;
 }				t_piece;
 
-void    get_player(t_info *info);
-void    get_map_xy(t_info *info);
+int    get_player(t_info *info);
+int    get_map_xy(t_info *info);
 int     get_map(t_info *info);
-void	get_piece(t_piece *piece);
+int	get_piece(t_piece *piece);
 void get_start_position_enemy(t_info *info);
 void get_start_position_player(t_info *info);
 int     checkplace(t_info *info, t_piece *piece, int x, int y);

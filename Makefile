@@ -1,26 +1,54 @@
-NAME = filler
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lpan <lpan@student.42.fr>                  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2019/05/10 18:26:42 by lpan              #+#    #+#              #
+#    Updated: 2019/05/10 18:26:48 by lpan             ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME = lpan.filler
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
 
-SRC = main.c	parse_info_piece.c	player_o.c	place_o.c	player_x.c	place_x.c checkplace.c\
+SRC = main.c\
+	parse_info_piece.c\
+	player_o.c\
+	place_o.c\
+	player_x.c\
+	place_x.c\
+	checkplace.c
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(patsubst %.c, %.o, $(SRC))
 
-$(NAME) :
-	make -C libft/ fclean && make -C libft/
+HEADER = ./libft/libft.h \
+		./includes/filler.h
+
+INCLUDE_PATH = -I libft -I includes
+
+$(NAME) : ./libft/libft.a $(OBJ)
 	$(CC) $(CFLAGS) -c $(SRC)
-	$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o filler
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L ./libft -lft
+
+./libft/libft.a : 
+	make -C libft
 
 all : $(NAME)
 
+%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< $(INCLUDE_PATH)
+
 clean :
 	rm -f $(OBJ)
-	make -C libft/ clean
+	make -C ./libft/ clean
 
 fclean : clean
-	make -C libft/ fclean
+	make -C ./libft/ fclean
 	rm -f $(NAME)
 
 re : fclean all
