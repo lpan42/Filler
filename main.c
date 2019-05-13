@@ -1,38 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpan <lpan@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/13 16:46:28 by lpan              #+#    #+#             */
+/*   Updated: 2019/05/13 16:46:30 by lpan             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "includes/filler.h"
 
-static void		initiate_struct(t_info *info, t_piece *piece)
+int		get_map_xy(t_info *info)
 {
-	info->player = 0;
-	info->enemy = 0;
-	info->map_y = 0;
-	info->map_x = 0;
-	info->map = NULL;
-	info->fail_place = 0;
-	info->finish = 0;
-	info->startpoint_player = 0;
-	info->startpoint_enemy = 0;
-	piece->piece_y = 0;
-	piece->piece_x = 0;
-	piece->piece = NULL;
+	char	*line;
+	char	**split;
+
+	if (get_next_line(0, &line) < 1)
+		return (0);
+	if (!(split = ft_strsplit(line, ' ')))
+	{
+		free_var(line);
+		return (0);
+	}
+	if (check_split("Plateau", split))
+	{
+		info->map_y = ft_atoi(split[1]);
+		info->map_x = ft_atoi(split[2]);
+	}
+	else
+	{
+		free_arr(split);
+		free_var(line);
+		return (0);
+	}
+	free_arr(split);
+	free_var(line);
+	return (1);
 }
 
-void get_start_position_player(t_info *info)
+int		get_player(t_info *info)
+{
+	char	*line;
+
+	if (get_next_line(0, &line) < 1)
+		return (0);
+	if (ft_strstr(line, "p1"))
+	{
+		info->player = 'O';
+		info->enemy = 'X';
+	}
+	else if (ft_strstr(line, "p2"))
+	{
+		info->player = 'X';
+		info->enemy = 'O';
+	}
+	else
+	{
+		free_var(line);
+		return (0);
+	}
+	free_var(line);
+	return (1);
+}
+
+void	get_start_position_player(t_info *info)
 {
 	int x;
 	int y;
 
 	x = 0;
 	y = 0;
-	while(y < info->map_y)
+	while (y < info->map_y)
 	{
 		x = 0;
-		while(x < info->map_x)
+		while (x < info->map_x)
 		{
-			if(info->map[y][x] == info->player)
+			if (info->map[y][x] == info->player)
 			{
 				info->startpoint_player = y;
-				return;
+				return ;
 			}
 			x++;
 		}
@@ -40,19 +88,19 @@ void get_start_position_player(t_info *info)
 	}
 }
 
-void get_start_position_enemy(t_info *info)
+void	get_start_position_enemy(t_info *info)
 {
 	int x;
 	int y;
 
 	x = 0;
 	y = 0;
-	while(y < info->map_y)
+	while (y < info->map_y)
 	{
 		x = 0;
-		while(x < info->map_x)
+		while (x < info->map_x)
 		{
-			if(info->map[y][x] == info->enemy)
+			if (info->map[y][x] == info->enemy)
 			{
 				info->startpoint_enemy = y;
 				return ;
@@ -63,34 +111,18 @@ void get_start_position_enemy(t_info *info)
 	}
 }
 
-int				main(void)
+int		main(void)
 {
 	t_info	info;
 	t_piece	piece;
 
 	initiate_struct(&info, &piece);
-	if(!get_player(&info))
+	if (!get_player(&info))
 		return (0);
-    if(!get_map_xy(&info))
+	if (!get_map_xy(&info))
 		return (0);
-	//get_map(&info);
-	// 	printf("wrongmap\n");
-	// get_start_position_player(&info);
-	// get_start_position_enemy(&info);
-	
-	// player_o(&info, &piece);
-	// printf("enemy: %d\n", info.startpoint_enemy);
-	// printf("player:%d\n", info.startpoint_player);
-	// printf("map_x: %d\n", info.map_x);
-	// printf("map_y: %d\n", info.map_y);
 	while (1)
-	{
-		if (info.player == 'O')
-			if (player_o(&info, &piece) == 0)
-				break ;
-		if (info.player == 'X')
-			if (player_x(&info, &piece) == 0)
-				break ;
-	}
+		if (player(&info, &piece) == 0)
+			break ;
 	free_map_piece(&info, &piece);
 }

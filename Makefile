@@ -18,12 +18,10 @@ CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 
 SRC = main.c\
 	parse_info_piece.c\
-	player_o.c\
-	place_o.c\
-	player_x.c\
-	place_x.c\
+	player.c\
+	place.c\
 	checkplace.c\
-	free_map_piece.c
+	init_struct_free_m_p.c
 
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
