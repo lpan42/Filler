@@ -7,13 +7,14 @@ static void		initiate_struct(t_info *info, t_piece *piece)
 	info->enemy = 0;
 	info->map_y = 0;
 	info->map_x = 0;
-	info->map = 0;
+	info->map = NULL;
 	info->fail_place = 0;
 	info->finish = 0;
 	info->startpoint_player = 0;
 	info->startpoint_enemy = 0;
 	piece->piece_y = 0;
 	piece->piece_x = 0;
+	piece->piece = NULL;
 }
 
 void get_start_position_player(t_info *info)

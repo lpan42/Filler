@@ -25,6 +25,22 @@ int get_player(t_info *info)
 	return (1);
 }
 
+int check_split(char *str, char **split)
+{
+	int		i;
+
+	i = 0;
+	if (!split)
+		return (0);
+	while (split[i] != NULL)
+		i++;
+	if (i != 3)
+		return (0);
+	if (ft_strcmp(str, split[0]))
+		return (0);
+	return (1);
+}
+
 int get_map_xy(t_info *info)
 {
     char    *line;
@@ -37,37 +53,24 @@ int get_map_xy(t_info *info)
 		free_var(line);
 		return (0);
 	}
-    if(!(split = ft_strsplit(line, ' ')))
+  if(!(split = ft_strsplit(line, ' ')))
+	{
+		free_var(line);
 		return (0);
-    info->map_y = ft_atoi(split[1]);
-	info->map_x = ft_atoi(split[2]);
+	}
+	if(check_split("Plateau", split))
+	{
+		info->map_y = ft_atoi(split[1]);
+		info->map_x = ft_atoi(split[2]);
+	}
+	else
+	{
+		free_arr(split);
+		free_var(line);
+		return (0);
+	}
 	free_arr(split);
 	free_var(line);
-	return (1);
-}
-
-static int check_map(t_info *info)
-{
-	int x;
-	int y;
-
-	x = 0;
-	y = 0;
-	if(!info->map)
-		return (0);
-	while (y < info->map_y - 1)
-	{
-		x = 0;
-		while (x < info->map_x - 1)
-		{
-			if (info->map[y][x] != 'O' && info->map[y][x] != 'X' &&
-				info->map[y][x] != '.' && info->map[y][x] != 'o' &&
-				info->map[y][x] != 'x')
-				return (0);
-			x++;
-		}
-		y++;
-	}
 	return (1);
 }
 
@@ -84,9 +87,9 @@ int	get_map(t_info *info)
 	if (get_next_line(0, &line) < 1)
 		return (0);
 	free_var(line);
-	while (get_next_line(0, &line) > 0)
+	while ( num_y < info->map_y && get_next_line(0, &line) > 0)
 	{
-		if (ft_isdigit(line[0]) && (line[4] == '.' || line[4] == 'O' || line[4] == 'X' || line[4] == 'x' || line[4] == 'o'))
+		if (ft_isdigit(line[0]))
 		{
 			temp = ft_strjoin(map, &line[4]);
 			free_var(map);
@@ -95,17 +98,21 @@ int	get_map(t_info *info)
 			temp = NULL;
 			num_y++;
 		}
-		if (num_y == info->map_y)
-			break ;
 		free_var(line);
 	}
-	if (!(info->map = ft_strsplit(map, '\n')))
+	if(num_y == info->map_y)
+	{
+			if (!(info->map = ft_strsplit(map, '\n')))
+				return (0);
+	}
+	else
+	{
+		free_var(temp);
+		free_var(map);
 		return (0);
+	}
 	free_var(temp);
 	free_var(map);
-	free_var(line);
-	if (check_map(info) == 0)
-		return(0);
 	return(1);
 }
 
@@ -122,11 +129,22 @@ int	get_piece(t_piece *piece)
 	num_y = 0;
 	if(get_next_line(0, &line) < 1)
 		return (0);
-    if(!(split = ft_strsplit(line, ' ')))
+  if(!(split = ft_strsplit(line, ' ')))
+	{
+		free_var(line);
 		return (0);
+	}
 	free_var(line);
-	piece->piece_y = ft_atoi(split[1]);
-	piece->piece_x = ft_atoi(split[2]);
+	if(check_split("Piece", split))
+	{
+		piece->piece_y = ft_atoi(split[1]);
+		piece->piece_x = ft_atoi(split[2]);
+	}
+	else
+	{
+		free_arr(split);
+		return (0);
+	}
 	free_arr(split);
 	while (get_next_line(0, &line) > 0)
 	{
@@ -134,7 +152,7 @@ int	get_piece(t_piece *piece)
 		free_var(piece_temp);
 		piece_temp = ft_strjoin(temp, "\n");
 		free_var(temp);
-			temp = NULL;
+		temp = NULL;
 		num_y++;
 		if (num_y == piece->piece_y)
 			break ;

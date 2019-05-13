@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -g#3 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror #-g#3 -fsanitize=address
 HEADER = -I ./libft.h
 NAME = libft.a
 OBJECTS = $(SOURCES:.c=.o)

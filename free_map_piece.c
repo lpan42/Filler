@@ -30,6 +30,7 @@ void free_var(void *var)
 {
 	if(var != NULL)
 		free(var);
+	
 }
 
 void free_arr(char **arr)

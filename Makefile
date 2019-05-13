@@ -14,7 +14,7 @@ NAME = lpan.filler
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g#3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 
 SRC = main.c\
 	parse_info_piece.c\
@@ -53,7 +53,7 @@ fclean : clean
 	rm -f $(NAME)
 
 re : all
-	#make re -C ./libft/
+	make re -C ./libft/
 	
 
 .PHONY : all clean fclean re
