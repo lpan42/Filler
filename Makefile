@@ -14,14 +14,15 @@ NAME = lpan.filler
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g3 #-fsanitize=address
 
 SRC = main.c\
 	parse_info_piece.c\
 	player.c\
 	place.c\
 	checkplace.c\
-	init_struct_free_m_p.c
+	utilities.c\
+	free_var_arr.c
 
 OBJ = $(patsubst %.c, %.o, $(SRC))
 

@@ -67,30 +67,35 @@ static int		check_top_line(t_info *info)
 	return (0);
 }
 
-int				player(t_info *info, t_piece *piece)
+int				load_map_piece(t_info *info, t_piece *piece)
 {
 	info->fail_place = 0;
-	if(info->map == 0)
+	if (info->map == 0)
 	{
-		if(get_map(info) == 0)
+		if (get_map(info) == 0)
 			return (0);
 		get_start_position_enemy(info);
 		get_start_position_player(info);
 	}
 	else
 	{
-		if(get_map(info) == 0)
+		if (get_map(info) == 0)
 			return (0);
 	}
-	if(!(get_piece(piece)))
+	if (!(get_piece(piece)))
 		return (0);
-	if(info->startpoint_player <= info->startpoint_enemy)
+	return (1);
+}
+
+int				player(t_info *info, t_piece *piece)
+{
+	if (!load_map_piece(info, piece))
+		return (0);
+	if (info->startpoint_player <= info->startpoint_enemy)
 	{
 		if (check_enemy_inline(info) == 1 && check_top_line(info) == 0)
 			place_top(info, piece);
 		else
-			place_bot(info, piece);
-		if (info->fail_place == 1)
 			place_bot(info, piece);
 	}
 	else
@@ -99,15 +104,12 @@ int				player(t_info *info, t_piece *piece)
 			place_bot(info, piece);
 		else
 			place_top(info, piece);
-		if (info->fail_place == 1)
-			place_bot(info, piece);
 	}
+	if (info->fail_place == 1)
+		place_bot(info, piece);
 	if (info->finish == 1)
 	{
-		ft_putnbr(0);
-		ft_putchar(' ');
-		ft_putnbr(0);
-		ft_putchar('\n');
+		print_res(0, 0);
 		return (0);
 	}
 	free_map_piece(info, piece);

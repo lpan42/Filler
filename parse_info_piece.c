@@ -12,22 +12,6 @@
 
 #include "includes/filler.h"
 
-int		check_split(char *str, char **split)
-{
-	int		i;
-
-	i = 0;
-	if (!split)
-		return (0);
-	while (split[i] != NULL)
-		i++;
-	if (i != 3)
-		return (0);
-	if (ft_strcmp(str, split[0]))
-		return (0);
-	return (1);
-}
-
 char	*get_map2(t_info *info)
 {
 	char	*temp;
@@ -76,6 +60,25 @@ int		get_map(t_info *info)
 	return (0);
 }
 
+int		get_piece3(int num_y, t_piece *piece, char *piece_temp)
+{
+	if (num_y == piece->piece_y)
+	{
+		if (!(piece->piece = ft_strsplit(piece_temp, '\n')))
+		{
+			free_var(piece_temp);
+			return (0);
+		}
+	}
+	else
+	{
+		free_var(piece_temp);
+		return (0);
+	}
+	free_var(piece_temp);
+	return (1);
+}
+
 int		get_piece2(int num_y, t_piece *piece)
 {
 	char	*temp;
@@ -86,21 +89,18 @@ int		get_piece2(int num_y, t_piece *piece)
 	temp = NULL;
 	while (num_y < piece->piece_y && get_next_line(0, &line) > 0)
 	{
-		temp = ft_strjoin(piece_temp, line);
-		free_var(piece_temp);
-		piece_temp = ft_strjoin(temp, "\n");
-		free_var(temp);
-		temp = NULL;
+		if (line[0] == '*' || line[0] == '.')
+		{
+			temp = ft_strjoin(piece_temp, line);
+			free_var(piece_temp);
+			piece_temp = ft_strjoin(temp, "\n");
+			free_var(temp);
+			temp = NULL;
+			num_y++;
+		}
 		free_var(line);
-		num_y++;
 	}
-	if (!(piece->piece = ft_strsplit(piece_temp, '\n')))
-	{
-		free_var(piece_temp);
-		return (0);
-	}
-	free_var(piece_temp);
-	return (1);
+	return (get_piece3(num_y, piece, piece_temp));
 }
 
 int		get_piece(t_piece *piece)
